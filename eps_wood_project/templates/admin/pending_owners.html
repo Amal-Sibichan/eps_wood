@@ -1,0 +1,84 @@
+{% extends "admin/common.html" %}
+{% load static %}
+{% block content %}
+
+<section class="page-header">
+    <div class="page-header-bg" style="background-image: url({% static 'assets/images/backgrounds/page-header-bg.jpg' %});"></div>
+    <div class="container">
+        <h2>Owner Approvals</h2>
+    </div>
+</section>
+
+<section class="admin-pending-section" style="padding: 60px 0; background: #f4f4f4;">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div style="background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 style="font-weight: 800; color: #1e1e1e;">Pending Seller Applications</h3>
+                        <span class="badge badge-warning" style="padding: 10px 20px; font-size: 14px;">
+                            {{ pending_owners_count }} Waiting
+                        </span>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover" style="vertical-align: middle;">
+                            <thead style="background: #e49632; color: #fff;">
+                                <tr>
+                                    <th style="border: none; border-radius: 10px 0 0 10px;">Photo</th>
+                                    <th style="border: none;">Full Name</th>
+                                    <th style="border: none;">Contact Info</th>
+                                    <th style="border: none;">Business Address</th>
+                                    <th style="border: none; border-radius: 0 10px 10px 0;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for owner in pending_owners %}
+                                <tr style="border-bottom: 1px solid #eee;">
+                                    <td style="padding: 15px;">
+                                        {% if owner.profile_image %}
+                                            <img src="{{ owner.profile_image.url }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; border: 2px solid #e49632;">
+                                        {% else %}
+                                            <img src="{% static 'assets/images/resources/testi-1-1.png' %}" style="width: 60px; border-radius: 50%;">
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <h6 style="margin: 0; font-weight: 700;">{{ owner.full_name }}</h6>
+                                        <small class="text-muted">Applied on: {{ owner.login.date_joined|date:"d M, Y" }}</small>
+                                    </td>
+                                    <td>
+                                        <p style="margin: 0; font-size: 14px;"><i class="fas fa-envelope mr-2" style="color: #e49632;"></i> {{ owner.email }}</p>
+                                        <p style="margin: 0; font-size: 14px;"><i class="fas fa-phone mr-2" style="color: #e49632;"></i> {{ owner.mobile }}</p>
+                                    </td>
+                                    <td style="max-width: 250px;">
+                                        <p style="font-size: 13px; margin: 0; line-height: 1.5;">{{ owner.address }}</p>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <a href="{% url 'approve_owner' owner.id %}" class="btn btn-success btn-sm mr-2" title="Approve">
+                                                <i class="fas fa-check"></i> Approve
+                                            </a>
+                                            <a href="{% url 'reject_owner' owner.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to reject this seller?')" title="Reject">
+                                                <i class="fas fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center" style="padding: 100px 0;">
+                                        <i class="fas fa-user-shield" style="font-size: 60px; color: #ddd; margin-bottom: 20px;"></i>
+                                        <h4 style="color: #aaa;">All clear! No pending applications.</h4>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

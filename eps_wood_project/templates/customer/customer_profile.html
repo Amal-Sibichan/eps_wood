@@ -1,0 +1,106 @@
+{% extends "customer/common.html" %}
+{% load static %}
+{% block content %}
+
+<section class="page-header" style="padding: 80px 0;">
+    <div class="page-header-bg" style="background-image: url({% static 'assets/images/backgrounds/page-header-bg.jpg' %}); opacity: 0.3;">
+    </div>
+    <div class="container text-center">
+        <div class="page-header__inner">
+            <h2 style="font-size: 50px; text-transform: uppercase; letter-spacing: 2px; color: #1e1e1e;">My Account</h2>
+        </div>
+    </div>
+</section>
+
+<section class="profile-page" style="margin-top: -80px; padding-bottom: 90px; position: relative; z-index: 10;">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-4 col-lg-5">
+                <div class="profile-card shadow-lg" style="background: #fff; padding: 40px 30px; border-radius: 15px; text-align: center; border-bottom: 5px solid #e49632;">
+                    <div class="profile-img-wrapper" style="margin-bottom: 25px; position: relative; display: inline-block;">
+                        {% if customer.profile_image %}
+                            <img src="{{ customer.profile_image.url }}" alt="{{ customer.full_name }}" 
+                                 style="width: 180px; height: 180px; object-fit: cover; border-radius: 50%; border: 5px solid #fdf8f2; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        {% else %}
+                            <img src="{% static 'assets/images/resources/testi-1-1.png' %}" 
+                                 style="width: 180px; height: 180px; border-radius: 50%;">
+                        {% endif %}
+                    </div>
+                    
+                    <h3 style="font-weight: 800; color: #1e1e1e; margin-bottom: 5px;">{{ customer.full_name }}</h3>
+                    <p style="color: #777; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Registered Customer</p>
+                    
+                    <div class="user-meta d-flex justify-content-center mt-3">
+                        <span style="background: #fdf8f2; color: #e49632; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 700;">
+                           <i class="fas fa-shopping-bag mr-1"></i> Active Buyer
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-8 col-lg-7">
+                <div class="profile-details-wrapper" style="background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); min-height: 100%;">
+                    <div class="section-title-two text-left">
+                        <span class="section-title-two__tagline">Personal Information</span>
+                        <h2 style="font-size: 32px; margin-bottom: 40px;">Account Details</h2>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="info-card d-flex align-items-center p-4" style="background: #f9f9f9; border-radius: 12px; transition: 0.3s;">
+                                <div class="icon-box" style="background: #e49632; color: #fff; width: 50px; height: 50px; line-height: 50px; text-align: center; border-radius: 10px; font-size: 20px;">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p style="margin: 0; color: #999; font-size: 13px; font-weight: 600;">Email Address</p>
+                                    <h5 style="margin: 0; font-size: 16px; color: #1e1e1e; word-break: break-all;">{{ customer.email }}</h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="info-card d-flex align-items-center p-4" style="background: #f9f9f9; border-radius: 12px;">
+                                <div class="icon-box" style="background: #e49632; color: #fff; width: 50px; height: 50px; line-height: 50px; text-align: center; border-radius: 10px; font-size: 20px;">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p style="margin: 0; color: #999; font-size: 13px; font-weight: 600;">Mobile Number</p>
+                                    <h5 style="margin: 0; font-size: 16px; color: #1e1e1e;">{{ customer.mobile }}</h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="info-card d-flex align-items-start p-4" style="background: #f9f9f9; border-radius: 12px;">
+                                <div class="icon-box" style="background: #e49632; color: #fff; width: 50px; height: 50px; line-height: 50px; text-align: center; border-radius: 10px; font-size: 20px; flex-shrink: 0;">
+                                    <i class="fas fa-map-marked-alt"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p style="margin: 0; color: #999; font-size: 13px; font-weight: 600;">Shipping Address</p>
+                                    <h5 style="margin: 0; font-size: 16px; color: #1e1e1e; line-height: 1.6;">{{ customer.address }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-actions d-flex mt-5">
+                        <a href="{% url 'customer_profile_update' %}" class="thm-btn" style="padding: 12px 35px; border-radius: 8px;">
+                            <i class="fas fa-user-edit mr-2"></i> Edit Profile
+                        </a>
+                        <a href="{% url 'order_history' %}" class="thm-btn" style="background: #1e1e1e; padding: 12px 35px; border-radius: 8px; margin-left: 15px;">
+                            <i class="fas fa-history mr-2"></i> My Orders
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .ml-3 { margin-left: 1rem !important; }
+    .mr-2 { margin-right: 0.5rem !important; }
+    .info-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+</style>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "common.html" %}
+{% load static %}
+{% block content %}
+
+<section class="page-header">
+    <div class="page-header-bg"
+         style="background-image: url('{% static "images/backgrounds/wood.jpg" %}');">
+    </div>
+
+    <div class="container">
+        <div class="page-header__inner">
+            <h2>Login</h2>
+        </div>
+    </div>
+</section>
+
+<section class="contact-page">
+    <div class="container">
+        <div class="row">
+
+            <!-- LEFT PANEL -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="contact-page__left">
+                    <h4 class="contact-page__title">
+                        Welcome back! Please login to continue.
+                    </h4>
+                    <p class="contact-page__text-1">
+                        Use your credentials to access your dashboard.
+                    </p>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL (FORM) -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="contact-page__right">
+                    <h3 class="contact-page__right-title">Login</h3><br>
+
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+
+                            <div class="col-xl-12">
+                                <div class="contact-page__input-box">
+                                    <input type="text" name="username" placeholder="Username" required>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12">
+                                <div class="contact-page__input-box">
+                                    <input type="password" name="password" placeholder="Password" required>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12">
+                                <div class="contact-page__btn-box">
+                                    <button type="submit" class="contact-page__btn">
+                                        Login
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

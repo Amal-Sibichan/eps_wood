@@ -1,0 +1,108 @@
+{% extends "common.html" %}
+{% load static %}
+{% block content %}
+
+<section class="page-header">
+    <div class="page-header-bg"
+         style="background-image: url('{% static "images/backgrounds/wood.jpg" %}');">
+    </div>
+
+    <div class="container">
+        <div class="page-header__inner">
+            <h2>Owner Register</h2>
+        </div>
+    </div>
+</section>
+
+<section class="contact-page">
+    <div class="container">
+        <div class="row">
+
+            <!-- LEFT PANEL (SAME) -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="contact-page__left">
+                    <h4 class="contact-page__title">
+                        Register as an Owner to manage your services.
+                    </h4>
+                    <p class="contact-page__text-1">
+                        Please fill in the form to continue.
+                    </p>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL (FORM) -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="contact-page__right">
+                    <h3 class="contact-page__right-title">Owner Registration</h3><br>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p style="color:red;">{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+
+                            <div class="col-xl-6">
+                                <div class="contact-page__input-box">
+                                    <input type="text" name="full_name" placeholder="Full Name" required>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="contact-page__input-box">
+                                    <input type="email" name="email" placeholder="Email Address" required>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="contact-page__input-box">
+                                    <input type="text" name="mobile" placeholder="Mobile Number" required>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="contact-page__input-box">
+                                    <input type="text" name="username" placeholder="Username" required>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="contact-page__input-box">
+                                    <input type="password" name="password" placeholder="Password" required>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="contact-page__input-box">
+                                    <input type="file" name="profile_image">
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12">
+                                <div class="contact-page__input-box text-message-box">
+                                    <textarea name="address" placeholder="Address" required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12">
+                                <div class="contact-page__btn-box">
+                                    <button type="submit" class="contact-page__btn">
+                                        Register
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

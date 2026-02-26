@@ -1,0 +1,140 @@
+{% extends "common.html" %}
+{% load static %}
+{% block content %}
+
+<div class="stricky-header stricked-menu main-menu main-menu-three">
+    <div class="sticky-header__content"></div>
+</div>
+
+<section class="page-header">
+    <div class="page-header-bg"
+         style="background-image: url('{% static "images/backgrounds/wood.jpg" %}');">
+    </div>
+
+    <div class="container">
+        <div class="page-header__inner">
+            <h2>Customer Register</h2>
+            <ul class="thm-breadcrumb list-unstyled">
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><span>/</span></li>
+                <li>Customer Register</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="contact-page">
+    <div class="container">
+        <div class="row">
+
+            <!-- LEFT SIDE (UNCHANGED) -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="contact-page__left">
+                    <h4 class="contact-page__title">
+                        Feel free to ask questions or share your message with us.
+                    </h4>
+                    <p class="contact-page__text-1">
+                        You can also reach out to us by phone or email.
+                    </p>
+
+                    <ul class="list-unstyled contact-page__list">
+                        <li>
+                            <div class="icon"><span class="icon-location"></span></div>
+                            <div class="content">
+                                <h5>Address</h5>
+                                <p>Boat House 2/21 City Road <br> Hoxton, N1 6NG, UK</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="icon"><span class="icon-phone"></span></div>
+                            <div class="content">
+                                <h5>Phone</h5>
+                                <p>
+                                    <a href="tel:8801682648101">+8801682648101</a><br>
+                                    <a href="tel:8801682648101">02 9292162</a>
+                                </p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="icon"><span class="icon-email"></span></div>
+                            <div class="content">
+                                <h5>Email</h5>
+                                <p>[email&nbsp;protected]</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDE (CUSTOMER REGISTER FORM) -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="contact-page__right">
+                    <h3 class="contact-page__right-title">Customer Registration</h3><br>
+
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+
+                            <div class="col-xl-6">
+                                <div class="contact-page__input-box">
+                                    <input type="text" name="full_name" placeholder="Full Name" required>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="contact-page__input-box">
+                                    <input type="email" name="email" placeholder="Email Address" required>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="contact-page__input-box">
+                                    <input type="text" name="mobile" placeholder="Mobile Number" required>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="contact-page__input-box">
+                                    <input type="text" name="username" placeholder="Username" required>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="contact-page__input-box">
+                                    <input type="password" name="password" placeholder="Password" required>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="contact-page__input-box">
+                                    <input type="file" name="profile_image">
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12">
+                                <div class="contact-page__input-box text-message-box">
+                                    <textarea name="address" placeholder="Address" required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12">
+                                <div class="contact-page__btn-box">
+                                    <button type="submit" class="contact-page__btn">
+                                        Register
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

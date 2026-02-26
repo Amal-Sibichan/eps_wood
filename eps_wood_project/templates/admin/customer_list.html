@@ -1,0 +1,93 @@
+{% extends "admin/common.html" %}
+{% load static %}
+{% block content %}
+
+<section class="page-header">
+    <div class="page-header-bg" style="background-image: url({% static 'assets/images/backgrounds/page-header-bg.jpg' %});"></div>
+    <div class="container">
+        <h2>Customer Management</h2>
+    </div>
+</section>
+
+<section class="admin-section" style="padding: 60px 0; background: #f4f4f4;">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div style="background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 style="font-weight: 800; color: #1e1e1e;">Registered Buyers</h3>
+                        <span class="badge" style="background: #1e1e1e; color: #fff; padding: 10px 20px;">Total Users: {{ customers.count }}</span>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table" style="vertical-align: middle;">
+                            <thead style="background: #fdf8f2; color: #1e1e1e;">
+                                <tr>
+                                    <th style="border: none; border-radius: 10px 0 0 10px;">User Profile</th>
+                                    <th style="border: none;">Contact Details</th>
+                                    <th style="border: none;">Default Shipping Address</th>
+                                    <th style="border: none;">Status</th>
+                                    <th style="border: none; border-radius: 0 10px 10px 0;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customer in customers %}
+                                <tr style="border-bottom: 1px solid #eee;">
+                                    <td style="padding: 20px 15px;">
+                                        <div class="d-flex align-items-center">
+                                            {% if customer.profile_image %}
+                                                <img src="{{ customer.profile_image.url }}" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
+                                            {% else %}
+                                                <img src="{% static 'assets/images/resources/testi-1-1.png' %}" style="width: 45px; border-radius: 50%;">
+                                            {% endif %}
+                                            <div class="ml-3">
+                                                <h6 style="margin: 0; font-weight: 700;">{{ customer.full_name }}</h6>
+                                                <small class="text-muted">UID: #CUST-{{ customer.id }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p style="margin: 0; font-size: 13px;"><i class="fas fa-envelope mr-1 text-warning"></i> {{ customer.email }}</p>
+                                        <p style="margin: 0; font-size: 13px;"><i class="fas fa-phone mr-1 text-warning"></i> {{ customer.mobile }}</p>
+                                    </td>
+                                    <td>
+                                        <p style="margin: 0; font-size: 13px; max-width: 200px; line-height: 1.4; color: #666;">{{ customer.address }}</p>
+                                    </td>
+                                    <td>
+                                        {% if customer.login.is_active %}
+                                            <span class="badge badge-success" style="padding: 6px 12px; font-weight: 500;">ACTIVE</span>
+                                        {% else %}
+                                            <span class="badge badge-danger" style="padding: 6px 12px; font-weight: 500;">BLOCKED</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if customer.login.is_active %}
+                                            <a href="{% url 'toggle_customer_status' customer.id 'block' %}" class="btn btn-outline-danger btn-sm px-3">
+                                                <i class="fas fa-user-slash mr-1"></i> Block
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'toggle_customer_status' customer.id 'unblock' %}" class="btn btn-success btn-sm px-3">
+                                                <i class="fas fa-user-check mr-1"></i> Unblock
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .ml-3 { margin-left: 1rem !important; }
+    .table td { vertical-align: middle; }
+    .badge-success { background-color: #28a745; }
+    .badge-danger { background-color: #dc3545; }
+</style>
+
+{% endblock %}

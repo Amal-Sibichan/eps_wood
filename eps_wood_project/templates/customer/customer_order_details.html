@@ -1,0 +1,86 @@
+{% extends "customer/common.html" %}
+{% load static %}
+{% block content %}
+
+<section class="page-header">
+    <div class="page-header-bg" style="background-image: url({% static 'assets/images/backgrounds/page-header-bg.jpg' %});"></div>
+    <div class="container"><h2>Order Details</h2></div>
+</section>
+
+<section class="order-details-view" style="padding: 90px 0; background: #fdf8f2;">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-8">
+                <div style="background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 style="font-weight: 800;">Item: {{ item.product.product_name }}</h3>
+                        <span class="badge" style="background: #1e1e1e; color: #fff; padding: 8px 15px;">#WZ-{{ order.id }}</span>
+                    </div>
+
+                    <div class="d-flex align-items-center p-3 mb-4" style="background: #f9f9f9; border-radius: 10px;">
+                        <img src="{{ item.product.images.first.image.url }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">
+                        <div class="ml-4">
+                            <h4 style="margin: 0;">{{ item.product.product_name }}</h4>
+                            <p class="text-muted mb-0">Price: ₹{{ item.price }} | Quantity: {{ item.quantity }}</p>
+                            <h5 style="color: #e49632; font-weight: 700;">Total: ₹{% widthratio item.price 1 item.quantity %}</h5>
+                        </div>
+                    </div>
+
+                    <h5 style="font-weight: 700; margin-bottom: 20px;">Shipment Status</h5>
+                    <div class="status-tracker d-flex justify-content-between text-center" style="position: relative; margin-bottom: 40px;">
+                        <div style="z-index: 1;">
+                            <i class="fas fa-box" style="color: {% if item.status != 'Cancelled' %}#e49632{% else %}#ddd{% endif %}; font-size: 24px;"></i>
+                            <p style="font-size: 12px; margin-top: 5px;">Placed</p>
+                        </div>
+                        <div style="z-index: 1;">
+                            <i class="fas fa-truck" style="color: {% if item.status == 'Confirmed' or item.status == 'Delivered' %}#e49632{% else %}#ddd{% endif %}; font-size: 24px;"></i>
+                            <p style="font-size: 12px; margin-top: 5px;">Shipped</p>
+                        </div>
+                        <div style="z-index: 1;">
+                            <i class="fas fa-check-double" style="color: {% if item.status == 'Delivered' %}#28a745{% else %}#ddd{% endif %}; font-size: 24px;"></i>
+                            <p style="font-size: 12px; margin-top: 5px;">Delivered</p>
+                        </div>
+                        <div style="position: absolute; top: 12px; left: 0; width: 100%; height: 2px; background: #eee; z-index: 0;"></div>
+                    </div>
+
+                    {% if item.status == 'Pending' %}
+                    <div class=" alert-warning" style="font-size: 14px; border-radius: 10px;">
+                        <i class="fas fa-info-circle mr-2"></i> You can cancel this item before it is shipped by the owner.
+                    </div>
+                    <a href="{% url 'cancel_order' item.id %}" class="btn btn-danger btn-block" onclick="return confirm('Are you sure you want to cancel this order?')">
+                        Cancel This Order
+                    </a>
+                    {% elif item.status == 'Cancelled' %}
+                    <div class=" alert-secondary text-center">
+                        <h5 class="mb-0 text-muted"><i class="fas fa-ban mr-2"></i> This order has been cancelled.</h5>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-xl-4">
+                <div style="background: #1e1e1e; color: #fff; padding: 35px; border-radius: 15px;">
+                    <h4 style="color: #e49632; font-weight: 700; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 10px;">Shipping Details</h4>
+                    <p style="font-size: 14px; line-height: 1.8;">
+                        <strong>Name:</strong> {{ customer.full_name }}<br>
+                        <strong>Phone:</strong> {{ customer.mobile }}<br>
+                        <strong>Email:</strong> {{ customer.email }}
+                    </p>
+                    <hr style="border-top: 1px solid #444;">
+                    <p style="font-size: 14px;">
+                        <strong><i class="fas fa-map-marker-alt text-warning mr-2"></i> Address:</strong><br>
+                        {{ customer.address }}
+                    </p>
+                    <hr style="border-top: 1px solid #444;">
+                    <div class="d-flex justify-content-between">
+                        <span>Payment Mode:</span>
+                        <span class="text-uppercase" style="color: #e49632; font-weight: 700;">{{ order.payment_method }}</span>
+                    </div>
+                </div>
+                <a href="{% url 'order_history' %}" class="thm-btn mt-3" style="width: 100%; text-align: center; display: block;">Back to List</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "customer/common.html" %}
+{% load static %}
+{% block content %}
+
+<section class="page-header">
+    <div class="page-header-bg" style="background-image: url({% static 'assets/images/backgrounds/page-header-bg.jpg' %});"></div>
+    <div class="container"><h2>Checkout</h2></div>
+</section>
+
+<section class="checkout-page" style="padding: 90px 0; background: #fdf8f2;">
+    <div class="container">
+        <form action="{% url 'place_order' %}" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-xl-7">
+                    <div style="background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                        <h3 style="font-weight: 700; margin-bottom: 30px; border-bottom: 2px solid #e49632; padding-bottom: 10px;">Choose Payment Method</h3>
+                        
+                        <div class="payment-option mb-3 p-3" style="border: 1px solid #ddd; border-radius: 8px; cursor: pointer;">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="cod" name="payment_method" value="cod" class="custom-control-input" checked onclick="toggleCardForm(false)">
+                                <label class="custom-control-label" for="cod" style="font-weight: 700; cursor: pointer;">
+                                    <i class="fas fa-truck mr-2" style="color: #e49632;"></i> Cash on Delivery (COD)
+                                </label>
+                            </div>
+                            <p class="text-muted ml-4 mb-0" style="font-size: 13px;">Pay in cash when your wood products arrive at your doorstep.</p>
+                        </div>
+
+                        <div class="payment-option mb-4 p-3" style="border: 1px solid #ddd; border-radius: 8px; cursor: pointer;">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="card" name="payment_method" value="card" class="custom-control-input" onclick="toggleCardForm(true)">
+                                <label class="custom-control-label" for="card" style="font-weight: 700; cursor: pointer;">
+                                    <i class="fas fa-credit-card mr-2" style="color: #e49632;"></i> Credit / Debit Card
+                                </label>
+                            </div>
+                            <p class="text-muted ml-4 mb-0" style="font-size: 13px;">Secure payment via 256-bit encrypted gateway.</p>
+                        </div>
+
+                        <div id="card-form-section" style="display: none; background: #f9f9f9; padding: 25px; border-radius: 10px; border: 1px dashed #e49632;">
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label style="font-size: 13px; font-weight: 600;">Card Number</label>
+                                    <input type="text" name="card_no" class="form-control" placeholder="0000 0000 0000 0000">
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label style="font-size: 13px; font-weight: 600;">Expiry Date</label>
+                                    <input type="text" name="expiry" class="form-control" placeholder="MM/YY">
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label style="font-size: 13px; font-weight: 600;">CVV</label>
+                                    <input type="password" name="cvv" class="form-control" placeholder="***">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-5">
+                    <div style="background: #1e1e1e; color: #fff; padding: 40px; border-radius: 15px; position: sticky; top: 100px;">
+                        <h4 style="color: #fff; font-weight: 700; border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 25px;">Final Summary</h4>
+                        {% for item in cart_items %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span style="font-size: 14px; color: #aaa;">{{ item.product.product_name }} (x{{ item.quantity }})</span>
+                            <span style="font-weight: 600;">₹{{ item.product.price }}</span>
+                        </div>
+                        {% endfor %}
+                        <hr style="border-top: 1px solid #444;">
+                        <div class="d-flex justify-content-between mb-4">
+                            <h4 style="color: #fff;">Grand Total</h4>
+                            <h4 style="color: #e49632;">₹{{ total_price }}</h4>
+                        </div>
+                        <button type="submit" class="thm-btn" style="width: 100%; border: none; padding: 15px;">
+                            Place Order <i class="fas fa-check-circle ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+function toggleCardForm(show) {
+    const cardSection = document.getElementById('card-form-section');
+    cardSection.style.display = show ? 'block' : 'none';
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "owner/common.html" %}
+{% load static %}
+{% block content %}
+
+<section class="page-header">
+    <div class="page-header-bg" style="background-image: url({% static 'assets/images/backgrounds/page-header-bg.jpg' %});"></div>
+    <div class="container">
+        <h2>Order Fulfillment</h2>
+    </div>
+</section>
+
+<section class="order-details-page" style="padding: 90px 0; background: #fdf8f2;">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-4 col-lg-5">
+                <div class="shipping-info-card shadow-sm" style="background: #1e1e1e; color: #fff; padding: 35px; border-radius: 15px;">
+                    <h4 style="color: #e49632; font-weight: 700; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 10px;">
+                        Customer Details
+                    </h4>
+                    <div class="mb-4">
+                        <h5 style="color: #fff; margin-bottom: 5px;">{{ customer.full_name }}</h5>
+                        <p style="color: #aaa; font-size: 14px;"><i class="fas fa-phone-alt mr-2"></i> {{ customer.mobile }}</p>
+                        <p style="color: #aaa; font-size: 14px;"><i class="fas fa-envelope mr-2"></i> {{ customer.email }}</p>
+                    </div>
+
+                    <h4 style="color: #e49632; font-weight: 700; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 10px;">
+                        Shipping Address
+                    </h4>
+                    <p style="color: #fff; line-height: 1.8; font-size: 15px;">
+                        <i class="fas fa-map-marker-alt mr-2" style="color: #e49632;"></i>
+                        {{ customer.address }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-xl-8 col-lg-7">
+                <div style="background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 style="font-weight: 800; color: #1e1e1e;">Order #WZ-{{ order.id }}</h3>
+                        <span class="badge" style="background: #fdf8f2; color: #e49632; padding: 8px 15px; border: 1px solid #e49632;">
+                            {{ item.status }}
+                        </span>
+                    </div>
+
+                    <div class="product-summary mb-5" style="background: #f9f9f9; padding: 25px; border-radius: 12px; border-left: 5px solid #e49632;">
+                        <div class="row align-items-center">
+                            <div class="col-md-2">
+                                <img src="{{ item.product.images.first.image.url }}" style="width: 100%; border-radius: 8px;">
+                            </div>
+                            <div class="col-md-6">
+                                <h4 style="margin: 0;">{{ item.product.product_name }}</h4>
+                                <p class="text-muted mb-0">Category: {{ item.product.get_category_display }} | Unit: {{ item.product.unit }}</p>
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <h4 style="color: #e49632;">₹{{ item.price }} <small class="text-muted">x {{ item.quantity }}</small></h4>
+                                <h5 style="font-weight: 800;">Total: ₹{% widthratio item.price 1 item.quantity %}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    {% if item.status != 'Cancelled' %}
+                    <div class="status-update-box" style="border: 1px solid #eee; padding: 30px; border-radius: 12px;">
+                        <h5 style="font-weight: 700; margin-bottom: 20px;">Update Dispatch Status</h5>
+                        <form action="{% url 'update_order_status' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <div class="row align-items-end">
+                                <div class="col-md-8">
+                                    <select name="status" class="form-control" style="height: 50px; border-radius: 8px;">
+                                        <option value="Pending" {% if item.status == 'Pending' %}selected{% endif %}>📦 Pending (Preparing for shipment)</option>
+                                        <option value="Confirmed" {% if item.status == 'Confirmed' %}selected{% endif %}>🚚 Shipped (In Transit)</option>
+                                        <option value="Delivered" {% if item.status == 'Delivered' %}selected{% endif %}>✅ Delivered (Handed to Customer)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="thm-btn" style="width: 100%; border: none; padding: 13px;">
+                                        Update <i class="fas fa-sync-alt ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    {% elif item.status == 'Cancelled' %}
+                    <div class=" alert-danger" style="font-size: 14px; border-radius: 10px;">
+                        <i class="fas fa-info-circle mr-2"></i> This order has been cancelled by the customer.
+                    </div>
+                    {% endif %}
+                    <div class="mt-4">
+                        <p style="font-size: 13px; color: #777;">
+                            <i class="fas fa-info-circle mr-1"></i> 
+                            Updating the status will notify the customer in their <strong>Order History</strong> dashboard.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

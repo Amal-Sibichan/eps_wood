@@ -1,0 +1,96 @@
+{% extends "admin/common.html" %}
+{% load static %}
+{% block content %}
+
+<section class="page-header">
+    <div class="page-header-bg" style="background-image: url({% static 'assets/images/backgrounds/page-header-bg.jpg' %});"></div>
+    <div class="container">
+        <h2>Seller Management</h2>
+    </div>
+</section>
+
+<section class="admin-section" style="padding: 60px 0; background: #fdf8f2;">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div style="background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 style="font-weight: 800; color: #1e1e1e;">Marketplace Wood Owners</h3>
+                        <div class="stats-pills d-flex">
+                            <span class="badge mr-2" style="background: #e49632; color: #fff; padding: 8px 15px;">Total: {{ owners.count }}</span>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table" style="vertical-align: middle;">
+                            <thead style="background: #1e1e1e; color: #fff;">
+                                <tr>
+                                    <th style="border: none; border-radius: 10px 0 0 10px;">Seller</th>
+                                    <th style="border: none;">Contact Details</th>
+                                    <th style="border: none;">Business Location</th>
+                                    <th style="border: none;">Account Status</th>
+                                    <th style="border: none; border-radius: 0 10px 10px 0;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for owner in owners %}
+                                <tr style="border-bottom: 1px solid #eee;">
+                                    <td style="padding: 20px 15px;">
+                                        <div class="d-flex align-items-center">
+                                            {% if owner.profile_image %}
+                                                <img src="{{ owner.profile_image.url }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #e49632;">
+                                            {% else %}
+                                                <img src="{% static 'assets/images/resources/testi-1-1.png' %}" style="width: 50px; border-radius: 50%;">
+                                            {% endif %}
+                                            <div class="ml-3">
+                                                <h6 style="margin: 0; font-weight: 700;">{{ owner.full_name }}</h6>
+                                                <small class="text-muted">ID: #OWN-{{ owner.id }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p style="margin: 0; font-size: 13px;"><i class="fas fa-envelope mr-1 text-warning"></i> {{ owner.email }}</p>
+                                        <p style="margin: 0; font-size: 13px;"><i class="fas fa-phone mr-1 text-warning"></i> {{ owner.mobile }}</p>
+                                    </td>
+                                    <td>
+                                        <p style="margin: 0; font-size: 13px; max-width: 200px; line-height: 1.4;">{{ owner.address }}</p>
+                                    </td>
+                                    <td>
+                                        {% if owner.status == 'approved' %}
+                                            <span style="background: #d4edda; color: #155724; padding: 5px 12px; border-radius: 5px; font-weight: 600;">APPROVED</span>
+                                        {% elif owner.status == 'revoked' %}
+                                            <span style="background: #f8d7da; color: #721c24; padding: 5px 12px; border-radius: 5px; font-weight: 600;">REVOKED</span>
+                                        {% else %}
+                                            <span style="background: #fff3cd; color: #856404; padding: 5px 12px; border-radius: 5px; font-weight: 600;">PENDING</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if owner.status == 'approved' %}
+                                            <a href="{% url 'reject_owner' owner.id %}" class="btn btn-outline-danger btn-sm" style="width: 100px;">
+                                                Revoke
+                                            </a>
+                                        {% elif owner.status == 'revoked' or owner.status == 'pending' %}
+                                            <a href="{% url 'approve_owner' owner.id %}" class="btn btn-success btn-sm" style="width: 100px;">
+                                                Approve
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .ml-3 { margin-left: 1rem !important; }
+    .mr-2 { margin-right: 0.5rem !important; }
+    .table td { vertical-align: middle; }
+</style>
+
+{% endblock %}

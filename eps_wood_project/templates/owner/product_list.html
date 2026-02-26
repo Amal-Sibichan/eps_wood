@@ -1,0 +1,144 @@
+{% extends "owner/common.html" %}
+{% load static %}
+{% block content %}
+
+<section class="page-header">
+    <div class="page-header-bg" style="background-image: url({% static 'assets/images/backgrounds/page-header-bg.jpg' %});"></div>
+    <div class="container text-center">
+        <div class="page-header__inner">
+            <ul class="thm-breadcrumb list-unstyled">
+                <li><a href="{% url 'owner_dashboard' %}">Home</a></li>
+                <li><span>/</span></li>
+                <li>Inventory</li>
+            </ul>
+            <h2 style="font-size: 40px;">Manage My Products</h2>
+        </div>
+    </div>
+</section>
+
+<section class="product-list-page" style="padding: 60px 0; background-color: #f9f9f9;">
+    <div class="container">
+        
+        <div class="product-controls" style="background: #fff; padding: 25px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 5px solid #e49632;">
+            <form method="GET" action="" class="row align-items-end">
+                <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
+                    <label style="font-weight: 700; color: #1e1e1e; margin-bottom: 8px;">Keyword Search</label>
+                    <div style="position: relative;">
+                        <input type="text" name="search" value="{{ search_query }}" placeholder="Wood type, name..." 
+                               style="width: 100%; border: 1px solid #ddd; padding: 12px 15px 12px 45px; border-radius: 8px;">
+                        <i class="fas fa-search" style="position: absolute; left: 18px; top: 16px; color: #e49632;"></i>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 mb-3 mb-lg-0">
+                    <label style="font-weight: 700; color: #1e1e1e; margin-bottom: 8px;">Category</label>
+                    <select name="category" style="width: 100%; border: 1px solid #ddd; padding: 12px; border-radius: 8px;">
+                        <option value="">All Categories</option>
+                        <option value="wood" {% if category_filter == 'wood' %}selected{% endif %}>Wood (Timber)</option>
+                        <option value="plywood" {% if category_filter == 'plywood' %}selected{% endif %}>Plywood</option>
+                        <option value="veneer" {% if category_filter == 'veneer' %}selected{% endif %}>Veneer</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-3 col-md-3 mb-3 mb-lg-0">
+                    <label style="font-weight: 700; color: #1e1e1e; margin-bottom: 8px;">Availability</label>
+                    <select name="stock" style="width: 100%; border: 1px solid #ddd; padding: 12px; border-radius: 8px;">
+                        <option value="">Any Status</option>
+                        <option value="in_stock" {% if stock_filter == 'in_stock' %}selected{% endif %}>In Stock</option>
+                        <option value="out_of_stock" {% if stock_filter == 'out_of_stock' %}selected{% endif %}>Out of Stock</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-2 col-md-12 text-right">
+                    <button type="submit" class="thm-btn" style="padding: 13px 20px; width: 100%; border: none; border-radius: 8px;">
+                        Filter <i class="fas fa-filter ml-2"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div style="background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 style="font-weight: 700; color: #1e1e1e;">Your Product Catalog</h3>
+                        <a href="{% url 'add_products' %}" class="thm-btn" style="padding: 10px 25px; font-size: 14px;">+ Add New</a>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr style="background-color: #fdf8f2;">
+                                    <th style="border: none; border-radius: 8px 0 0 8px;">Product</th>
+                                    <th style="border: none;">Category</th>
+                                    <th style="border: none;">Price Details</th>
+                                    <th style="border: none;">Stock Qty</th>
+                                    <th style="border: none;">Status</th>
+                                    <th style="border: none; border-radius: 0 8px 8px 0;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="img-box mr-3">
+                                                {% for img in product.images.all %}
+                                                    {% if img.is_primary %}
+                                                        <img src="{{ img.image.url }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; border: 1px solid #eee;">
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <div>
+                                                <h6 style="margin: 0; font-weight: 700;">{{ product.product_name }}</h6>
+                                                <small class="text-muted">{{ product.wood_type }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-light" style="padding: 8px 12px;">{{ product.get_category_display }}</span></td>
+                                    <td>
+                                        <span style="color: #e49632; font-weight: 700;">₹{{ product.price }}</span>
+                                        <small>/ {{ product.unit }}</small>
+                                    </td>
+                                    <td><strong>{{ product.stock_quantity }}</strong></td>
+                                    <td>
+                                        {% if product.availability_status == 'in_stock' %}
+                                            <span class="text-success" style="font-size: 14px;"><i class="fas fa-circle mr-1" style="font-size: 8px;"></i> Available</span>
+                                        {% else %}
+                                            <span class="text-danger" style="font-size: 14px;"><i class="fas fa-circle mr-1" style="font-size: 8px;"></i> Sold Out</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{% url 'edit_product' product.id %}" class="btn btn-sm btn-light border" title="Edit"><i class="fas fa-edit"></i></a>
+                                            <a href="#" class="btn btn-sm btn-light border text-danger" title="Delete"><i class="fas fa-trash"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center" style="padding: 80px 0;">
+                                        <div class="icon mb-3" style="font-size: 50px; color: #ddd;"><i class="fas fa-box-open"></i></div>
+                                        <h4 style="color: #aaa;">No products matching your criteria.</h4>
+                                        <a href="{% url 'product_list' %}" class="btn btn-link text-warning">Clear all filters</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .table thead th { text-transform: uppercase; font-size: 13px; color: #777; letter-spacing: 1px; }
+    .table td { vertical-align: middle; }
+    .mr-3 { margin-right: 1rem !important; }
+    .badge-light { background-color: #f4f4f4; color: #333; }
+</style>
+
+{% endblock %}
