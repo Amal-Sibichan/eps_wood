@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 from django.db.models import Q  
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
+from django.http import HttpResponse
 # Create your views here.
 
 # def adm(request):
@@ -33,7 +34,9 @@ def owner_dashboard(request):
     if request.session.get('usertype') != 'owner':
         messages.error(request, "You are not authorized to access this page")
         return redirect('login')
-    return render(request, 'owner/owner_dashboard.html')
+    login = Login.objects.get(id=request.session.get('uid'))
+    owner = Owner.objects.get(login=login)
+    return render(request, 'owner/owner_dashboard.html', {'login': login, 'owner': owner})
 
 def customer_dashboard(request):
     if request.session.get('usertype') != 'customer':
@@ -98,6 +101,7 @@ def owner_register(request):
         email = request.POST['email']
         username = request.POST['username']
         password = request.POST['password']
+        owner_type = request.POST['type']
         image = request.FILES.get('profile_image')
 
         # Email validation
@@ -129,7 +133,8 @@ def owner_register(request):
             address=address,
             mobile=mobile,
             email=email,
-            profile_image=image
+            profile_image=image,
+            type=owner_type
         )
 
         messages.success(request, 'Owner registered successfully')
@@ -142,17 +147,17 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-
+        
         # Check for admin (hardcoded)
         if username == 'admin' and password == '1234':
             request.session['uid'] = 0  # no user id for admin
             request.session['usertype'] = 'admin'
             messages.success(request, "Login successful as Admin")
             return redirect('/admin_dashboard/')
-
+        
         # Check user in Login model
         user = authenticate(username=username, password=password)
-
+       
         if user:
             request.session['uid'] = user.id
             request.session['usertype'] = user.usertype
@@ -643,6 +648,8 @@ def approve_owner(request, owner_id):
         return redirect('login')
     owner = Owner.objects.get(id=owner_id)
     owner.status='approved'
+    owner.login.is_active = True
+    owner.login.save()
     owner.save()
     return redirect('pending_owners')
 

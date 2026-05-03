@@ -26,6 +26,7 @@
                                  style="width: 200px; height: 200px; border-radius: 50%;">
                         {% endif %}
                     </div>
+                    {% if owner.type == 'owner' %}
                     <div class="profile-info text-center">
                         <h3 style="font-weight: 700; color: #1e1e1e; margin-bottom: 5px;">{{ owner.full_name }}</h3>
                         <p style="color: #e49632; font-weight: 600; text-transform: uppercase; font-size: 14px;">
@@ -34,6 +35,16 @@
                         <hr style="border-top: 1px solid #eee; margin: 20px 0;">
                         <p class="text-muted" style="font-style: italic;">"Providing high-quality timber for global projects."</p>
                     </div>
+                    {% else %}
+                    <div class="profile-info text-center">
+                        <h3 style="font-weight: 700; color: #1e1e1e; margin-bottom: 5px;">{{ owner.full_name }}</h3>
+                        <p style="color: #e49632; font-weight: 600; text-transform: uppercase; font-size: 14px;">
+                            <i class="fas fa-check-circle"></i> Authorized PlyWood Owner
+                        </p>
+                        <hr style="border-top: 1px solid #eee; margin: 20px 0;">
+                        <p class="text-muted" style="font-style: italic;">"Providing high-quality plywood for global projects."</p>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
 
