@@ -1,7 +1,7 @@
 # EPS Wood Project
 
 A Django-based multi-vendor e-commerce platform for buying and selling wood, plywood, veneers, and related products.
-Demo:Amalsibichan.pythonanywhere.com
+Demo:https://amalsibichan.pythonanywhere.com/
 
 ---
 
